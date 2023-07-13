@@ -19,7 +19,7 @@ const Developers = () => {
   }
   const [isEdit, setIsEdit] = useState(false);
   const onSubmit = async () => {
-    const res = await axios.post("/api/create/dev", {
+    const res = await axios.post(`${process.env.REACT_APP_PORT}/api/create/dev`, {
       Company: Developer.Company,
       name: Developer.name,
       phoneNumber: Developer.phoneNumber,
@@ -39,7 +39,7 @@ const Developers = () => {
     }
   }
   const updateUser = async (id) => {
-    const res = await axios.put("/api/update/dev/"+id, {
+    const res = await axios.put(`${process.env.REACT_APP_PORT}/api/update/dev/${id}`, {
       Company: Developer.Company,
       name: Developer.name,
       phoneNumber: Developer.phoneNumber,
@@ -60,7 +60,7 @@ const Developers = () => {
   }
 
   const getDevelopers = async () => {
-    const res = await axios.get('/api/all/dev', {
+    const res = await axios.get(process.env.REACT_APP_PORT + '/api/all/dev', {
       Headers: {
         'Content-Type': 'application/json'
       }
@@ -90,7 +90,7 @@ const Developers = () => {
     });
      
     if (willDelete) {
-      const res = await axios.delete('/api/delete/dev/'+id,{
+      const res = await axios.delete(process.env.REACT_APP_PORT + '/api/delete/dev/'+id,{
         Headers: {
           'Content-Type': 'application/json'
         }

@@ -7,7 +7,7 @@ import { RequiredField } from '../../../utility/RequiredField'
 const PaymentRecieve = () => {
   const [getData, setGetData] = useState(null);
   const getDataa = async () => {
-    const res = await axios.get(`/api/get/all/buyermaster`, {
+    const res = await axios.get(`${process.env.REACT_APP_PORT}/api/get/all/buyermaster`, {
       Headers: {
         'Content-Type': 'application/json'
       }
@@ -24,7 +24,7 @@ const PaymentRecieve = () => {
   const getBuilding = async (id) => {
     if (id?.length === 12 || id?.length === 24) {
 
-      const res = await axios.get(`/api/building/${id}`, {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/building/${id}`, {
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -40,7 +40,7 @@ const PaymentRecieve = () => {
   const getStage = async (id) => {
     if (id?.length === 12 || id?.length === 24) {
 
-      const res = await axios.get(`/api/get/demand/${id}`, {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/get/demand/${id}`, {
         Headers: {
           'Content-Type': 'application/json'
         }

@@ -50,7 +50,7 @@ const CreateFlat = () => {
   }
   const [AllProjects, setAllProjects] = useState(null);
   const getProject = async () => {
-    const res = await axios.get('/api/all/project', {
+    const res = await axios.get(process.env.REACT_APP_PORT + '/api/all/project', {
       Headers: {
         'Content-Type': 'application/json'
       }
@@ -63,7 +63,7 @@ const CreateFlat = () => {
   }, []);
   const getBuildings = async (id) => {
     if ((id?.length === 24 || id?.length === 12) && id !== "Select Project") {
-      const res = await axios.get(`/api/buildings/${id}`, {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/buildings/${id}`, {
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -74,7 +74,7 @@ const CreateFlat = () => {
   }
   const getUnits = async (id, project) => {
     if ((id?.length === 24 || id?.length === 12) && (project?.length === 24 || project?.length === 12)) {
-      const res = await axios.get(`/api/find/unit/${id}/${project}`, {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/find/unit/${id}/${project}`, {
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -85,7 +85,7 @@ const CreateFlat = () => {
   }
   const getBuildingDetail = async (id) => {
     if ((id?.length === 24 || id?.length === 12)) {
-      const res = await axios.get(`/api/building/${id}`, {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/building/${id}`, {
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -96,7 +96,7 @@ const CreateFlat = () => {
   }
 
   const uploadFlat = async () => {
-    const res = await axios.post('/api/create/flat', {
+    const res = await axios.post(process.env.REACT_APP_PORT + '/api/create/flat', {
       Project: CreateFlat.Project,
       floor: CreateFlat.floor,
       building: CreateFlat.building,
@@ -134,7 +134,7 @@ const CreateFlat = () => {
      });
       
      if (willDelete) {
-       const res = await axios.delete('/api/delete/flat/'+id,{
+       const res = await axios.delete(process.env.REACT_APP_PORT + '/api/delete/flat/'+id,{
          Headers: {
            'Content-Type': 'application/json'
          }
@@ -144,7 +144,7 @@ const CreateFlat = () => {
      willDelete();
    }
    const updateFlat = async(id)=>{
-     const res = await axios.put('/api/update/flat/'+id,{
+     const res = await axios.put(process.env.REACT_APP_PORT + '/api/update/flat/'+id,{
        Project: CreateFlat.Project,
        floor: CreateFlat.floor,
        building: CreateFlat.building,
@@ -163,7 +163,7 @@ const CreateFlat = () => {
      }
    }
    const getAllFlat = async()=>{
-    const res = await axios.get(`/api/all/flat`,{
+    const res = await axios.get(`${process.env.REACT_APP_PORT}/api/all/flat`,{
       Headers: {
         'Content-Type': 'application/json'
       }

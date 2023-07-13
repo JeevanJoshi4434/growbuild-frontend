@@ -19,7 +19,7 @@ const CreateStage = () => {
   }
   const [AllProjects, setAllProjects] = useState(null);
   const getProject = async () => {
-    const res = await axios.get('/api/all/project', {
+    const res = await axios.get(process.env.REACT_APP_PORT + '/api/all/project', {
       Headers: {
         'Content-Type': 'application/json'
       }
@@ -32,7 +32,7 @@ const CreateStage = () => {
   }, []);
   const getBuildings = async (id) => {
     if ((id?.length === 24 || id?.length === 12) && id !== "Select Project") {
-      const res = await axios.get(`/api/buildings/${id}`, {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/buildings/${id}`, {
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -44,7 +44,7 @@ const CreateStage = () => {
   }
   const getBuildingDetail = async (id) => {
     if ((id?.length === 24 || id?.length === 12)) {
-      const res = await axios.get(`/api/building/${id}`, {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/building/${id}`, {
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -56,7 +56,7 @@ const CreateStage = () => {
   }
 
   const createDemand = async()=>{
-    const res = await axios.post('/api/create/demand',{
+    const res = await axios.post(process.env.REACT_APP_PORT + '/api/create/demand',{
       Project: Demand.Project,
       Building: Demand.Building,
       stage_name: Demand.stage_name,
@@ -87,7 +87,7 @@ const CreateStage = () => {
      });
       
      if (willDelete) {
-       const res = await axios.delete('/api/delete/flat/'+id,{
+       const res = await axios.delete(process.env.REACT_APP_PORT + '/api/delete/flat/'+id,{
          Headers: {
            'Content-Type': 'application/json'
          }
@@ -97,7 +97,7 @@ const CreateStage = () => {
      willDelete();
    }
    const updateFlat = async(id)=>{
-     const res = await axios.put('/api/update/demand/'+id,{
+     const res = await axios.put(process.env.REACT_APP_PORT + '/api/update/demand/'+id,{
       Project: Demand.Project,
       Building: Demand.Building,
       stage_name: Demand.stage_name,
@@ -112,7 +112,7 @@ const CreateStage = () => {
      }
    }
   const getAllStage = async()=>{
-      const res = await axios.get(`/api/get/all/demand`,{
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/get/all/demand`,{
         Headers: {
           'Content-Type': 'application/json'
         }

@@ -38,7 +38,7 @@ const SetBooking = () => {
     Project: null, building: null, floor: null, unit: null, flat: null, parking: null, booking_price: null, booking_date: null, allotment_date: null, agreement_date: null, first_applicant_name: null, first_applicant_father_name: null, first_applicant_husband_name: null, first_applicant_permanentAddress: null, first_applicant_correspondAddress: null, first_applicant_contactNumber: null, first_applicant_email: null, first_applicant_dob: null, first_applicant_AadharNumber: null, first_applicant_pan_number: null, first_applicant_City: null, first_applicant_police_station: null, first_applicant_country: null, first_applicant_occupation: null, first_applicant_religion: null, first_applicant_status: null, second_applicant_name: null, second_applicant_father_name: null, second_applicant_husband_name: null, second_applicant_contact_number: null, second_applicant_email: null, second_applicant_dob: null, second_applicant_pan_number: null, second_applicant_occupation: null, second_applicant_address: null, second_applicant_relation_with_first_applicant: null, third_applicant_name: null, third_applicant_phone_number: null, fourth_applicant_name: null, fourth_applicant_phone_number: null, second_applicant_adhar_number: null, id:null
   })
   const uploadBooking = async () => {
-    const res = await axios.post('/api/create/booking', {
+    const res = await axios.post(process.env.REACT_APP_PORT + '/api/create/booking', {
       Project: Booking?.Project,
       building: Booking?.building,
       floor: Booking?.floor,
@@ -100,7 +100,7 @@ const SetBooking = () => {
   const [Building, setBuilding] = useState(null);
   const [AllProjects, setAllProjects] = useState(null);
   const getProject = async () => {
-    const res = await axios.get('/api/all/project', {
+    const res = await axios.get(process.env.REACT_APP_PORT + '/api/all/project', {
       Headers: {
         'Content-Type': 'application/json'
       }
@@ -113,7 +113,7 @@ const SetBooking = () => {
   }, []);
   const getBuildings = async (id) => {
     if ((id?.length === 24 || id?.length === 12) && id !== "Select Project") {
-      const res = await axios.get(`/api/buildings/${id}`, {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/buildings/${id}`, {
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -124,7 +124,7 @@ const SetBooking = () => {
   }
   const getUnits = async (id, project) => {
     if ((id?.length === 24 || id?.length === 12) && (project?.length === 24 || project?.length === 12)) {
-      const res = await axios.get(`/api/find/unit/${id}/${project}`, {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/find/unit/${id}/${project}`, {
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -135,7 +135,7 @@ const SetBooking = () => {
   }
   const getBuildingDetail = async (id) => {
     if ((id?.length === 24 || id?.length === 12)) {
-      const res = await axios.get(`/api/building/${id}`, {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/building/${id}`, {
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -233,7 +233,7 @@ const SetBooking = () => {
      });
   }
   const getAllBooking = async () => {
-    const res = await axios.get(`/api/get/all/booking`, {
+    const res = await axios.get(`${process.env.REACT_APP_PORT}/api/get/all/booking`, {
       Headers: {
         'Content-Type': 'application/json'
       }
@@ -253,7 +253,7 @@ const SetBooking = () => {
     });
 
     if (willDelete) {
-      const res = await axios.delete('/api/delete/booking/' + id, {
+      const res = await axios.delete(process.env.REACT_APP_PORT + '/api/delete/booking/' + id, {
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -263,7 +263,7 @@ const SetBooking = () => {
     willDelete();
   }
   const updateBooking = async (id) => {
-    const res = await axios.put('/api/update/booking/' + id, {
+    const res = await axios.put(process.env.REACT_APP_PORT + '/api/update/booking/' + id, {
       Project: Booking?.Project,
       building: Booking?.building,
       floor: Booking?.floor,

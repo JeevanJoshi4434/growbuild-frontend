@@ -34,7 +34,7 @@ const CreateParking = () => {
   }
   const [AllProjects, setAllProjects] = useState(null);
   const getProject = async () => {
-    const res = await axios.get('/api/all/project', {
+    const res = await axios.get(process.env.REACT_APP_PORT + '/api/all/project', {
       Headers: {
         'Content-Type': 'application/json'
       }
@@ -47,7 +47,7 @@ const CreateParking = () => {
   }, []);
   const getBuildings = async (id) => {
     if ((id?.length === 24 || id?.length === 12) && id !== "Select Project") {
-      const res = await axios.get(`/api/buildings/${id}`, {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/buildings/${id}`, {
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -59,7 +59,7 @@ const CreateParking = () => {
   }
   const getBuildingDetail = async (id) => {
     if ((id?.length === 24 || id?.length === 12)) {
-      const res = await axios.get(`/api/building/${id}`, {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/building/${id}`, {
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -71,7 +71,7 @@ const CreateParking = () => {
   }
   console.log({ allBuilding, CreateParking });
   const Createparking = async()=>{
-    const res = await axios.post('/api/create/parking',{
+    const res = await axios.post(process.env.REACT_APP_PORT + '/api/create/parking',{
       Project:CreateParking.project,
       floor:CreateParking.floor,
       building:CreateParking.building,
@@ -87,7 +87,7 @@ const CreateParking = () => {
   }
   const [AllParking, setAllParking] = useState(null)
   const getParkings = async()=>{
-    const res = await axios.get('/api/all/parking',{
+    const res = await axios.get(process.env.REACT_APP_PORT + '/api/all/parking',{
       Headers: {
         'Content-Type': 'application/json'
       }
@@ -115,7 +115,7 @@ const CreateParking = () => {
     });
      
     if (willDelete) {
-      const res = await axios.delete('/api/delete/parking/'+id,{
+      const res = await axios.delete(process.env.REACT_APP_PORT + '/api/delete/parking/'+id,{
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -125,7 +125,7 @@ const CreateParking = () => {
     willDelete();
   }
   const updateParking = async(id)=>{
-    const res = await axios.put('/api/update/parking/'+id,{
+    const res = await axios.put(process.env.REACT_APP_PORT + '/api/update/parking/'+id,{
       Project:CreateParking.project,
       floor:CreateParking.floor,
       building:CreateParking.building,

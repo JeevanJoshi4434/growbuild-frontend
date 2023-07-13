@@ -10,7 +10,7 @@ const SaleInventoryMaster = () => {
   })
   const [AllProjects, setAllProjects] = useState(null);
   const getProject = async () => {
-    const res = await axios.get('/api/all/project', {
+    const res = await axios.get(process.env.REACT_APP_PORT + '/api/all/project', {
       Headers: {
         'Content-Type': 'application/json'
       }

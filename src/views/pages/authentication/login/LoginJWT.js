@@ -18,7 +18,12 @@ class LoginJWT extends React.Component {
   handleLogin = async() => {
     console.log(this.state.email)
     console.log(this.state.password)
-    const res = await axios.post("/api/login", {
+    const res = await axios.post(`${process.env.REACT_APP_PORT}/api/login`, {
+      Headers:{
+        'Access-Control-Allow-Headers':'Content-Type',
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type':'application/json'
+      },
       email: this.state.email,
       password: this.state.password,
     },{

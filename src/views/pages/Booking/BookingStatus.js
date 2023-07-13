@@ -51,7 +51,7 @@ const BookingStatus = () => {
   }
   const [AllProjects, setAllProjects] = useState(null);
   const getProject = async () => {
-    const res = await axios.get('/api/all/project', {
+    const res = await axios.get(process.env.REACT_APP_PORT + '/api/all/project', {
       Headers: {
         'Content-Type': 'application/json'
       }
@@ -64,7 +64,7 @@ const BookingStatus = () => {
   }, []);
   const getBuildings = async (id) => {
     if ((id?.length === 24 || id?.length === 12) && id !== "Select Project") {
-      const res = await axios.get(`/api/buildings/${id}`, {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/buildings/${id}`, {
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -75,7 +75,7 @@ const BookingStatus = () => {
   }
   const getUnits = async (id, project) => {
     if ((id?.length === 24 || id?.length === 12) && (project?.length === 24 || project?.length === 12)) {
-      const res = await axios.get(`/api/find/unit/${id}/${project}`, {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/find/unit/${id}/${project}`, {
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -86,7 +86,7 @@ const BookingStatus = () => {
   }
   const getBuildingDetail = async (id) => {
     if ((id?.length === 24 || id?.length === 12)) {
-      const res = await axios.get(`/api/building/${id}`, {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/building/${id}`, {
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -98,7 +98,7 @@ const BookingStatus = () => {
 
   const getDetails = async (building, project, unit, flat, floor) => {
     if ((building.length === 12 || building.length === 24) && (project.length === 12 || project.length === 24) && (unit.length === 12 || unit.length === 24) && (flat !== 0|| flat !== null) && (floor !== 0||floor !== null) ) {
-      const res = await axios.get(`/api/${building}/${project}/${unit}/${flat}/${floor}`, {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/${building}/${project}/${unit}/${flat}/${floor}`, {
         Headers: {
           'Content-Type': 'application/json'
         }

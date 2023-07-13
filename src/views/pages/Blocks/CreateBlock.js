@@ -12,7 +12,7 @@ const CreateBlock = () => {
     Project:null, buildingName:null, total_number_of_floors:null, total_number_of_flats:null, parkings:null,id:null
   })
   const getProject = async()=>{
-    const res = await axios.get('/api/all/project',{
+    const res = await axios.get(process.env.REACT_APP_PORT + '/api/all/project',{
       Headers: {
         'Content-Type': 'application/json'
       }
@@ -31,7 +31,7 @@ const CreateBlock = () => {
   }
 
   const uploadBlock = async()=>{
-    const res = await axios.post('/api/create/building',{
+    const res = await axios.post(process.env.REACT_APP_PORT + '/api/create/building',{
       Project:createBlock.Project,
       buildingName:createBlock.buildingName,
       total_number_of_floors:createBlock.total_number_of_floors,
@@ -57,7 +57,7 @@ const CreateBlock = () => {
     });
      
     if (willDelete) {
-      const res = await axios.delete('/api/delete/building/'+id,{
+      const res = await axios.delete(process.env.REACT_APP_PORT + '/api/delete/building/'+id,{
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -67,7 +67,7 @@ const CreateBlock = () => {
     willDelete();
   }
   const updateBuilding = async(id)=>{
-    const res = await axios.put('/api/update/building/'+id,{
+    const res = await axios.put(process.env.REACT_APP_PORT + '/api/update/building/'+id,{
       Project:createBlock.Project,
       buildingName:createBlock.buildingName,
       total_number_of_floors:createBlock.total_number_of_floors,
@@ -80,7 +80,7 @@ const CreateBlock = () => {
     }
   }
   const getBuilding = async()=>{
-      const res = await axios.get('/api/all/building',{
+      const res = await axios.get(process.env.REACT_APP_PORT + '/api/all/building',{
         Headers:{
           'Content-Type': 'application/json'
         }

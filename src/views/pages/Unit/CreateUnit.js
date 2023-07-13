@@ -21,7 +21,7 @@ const CreateUnit = () => {
   }
   const [AllProjects, setAllProjects] = useState(null);
   const getProject = async () => {
-    const res = await axios.get('/api/all/project', {
+    const res = await axios.get(process.env.REACT_APP_PORT + '/api/all/project', {
       Headers: {
         'Content-Type': 'application/json'
       }
@@ -34,7 +34,7 @@ const CreateUnit = () => {
   }, []);
   const getBuildings = async (id) => {
     if ((id?.length === 24 || id?.length === 12) && id !== "Select Project") {
-      const res = await axios.get(`/api/buildings/${id}`, {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/buildings/${id}`, {
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -46,7 +46,7 @@ const CreateUnit = () => {
   }
   const getBuildingDetail = async (id) => {
     if ((id?.length === 24 || id?.length === 12)) {
-      const res = await axios.get(`/api/building/${id}`, {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/building/${id}`, {
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -58,7 +58,7 @@ const CreateUnit = () => {
   }
 
   const createUnit = async () => {
-    const res = await axios.post('/api/create/unit', {
+    const res = await axios.post(process.env.REACT_APP_PORT + '/api/create/unit', {
       Project: CreateUnit.Project,
       building: CreateUnit.building,
       unit_name: CreateUnit.unit_name,
@@ -77,7 +77,7 @@ const CreateUnit = () => {
   }
 
   const deleteUnit = async () => {
-    const res = await axios.delete(`/api/delete/unit/${CreateUnit._id}`)
+    const res = await axios.delete(`${process.env.REACT_APP_PORT}/api/delete/unit/${CreateUnit._id}`)
     if (res.status === 200) {
       window.alert("Unit Deleted!");
       getAllUnits();
@@ -92,7 +92,7 @@ const CreateUnit = () => {
   }
 
   const updateUnit = async (id) => {
-    const res = await axios.put(`/api/update/unit/${id}`, {
+    const res = await axios.put(`${process.env.REACT_APP_PORT}/api/update/unit/${id}`, {
       Project: CreateUnit.Project,
       building: CreateUnit.building,
       unit_name: CreateUnit.unit_name,
@@ -114,7 +114,7 @@ const CreateUnit = () => {
 
 
   const getAllUnits = async()=>{
-    const res = await axios.get('/api/all/unit', {
+    const res = await axios.get(process.env.REACT_APP_PORT + '/api/all/unit', {
       Headers: {
         'Content-Type': 'application/json'
       }

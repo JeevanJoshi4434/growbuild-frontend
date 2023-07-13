@@ -9,7 +9,7 @@ const Projects = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [AllProjects, setAllProjects] = useState(null);
   const getProject = async () => {
-    const res = await axios.get('/api/all/project', {
+    const res = await axios.get(process.env.REACT_APP_PORT + '/api/all/project', {
       Headers: {
         'Content-Type': 'application/json'
       }
@@ -22,7 +22,7 @@ const Projects = () => {
   })
   const [AllDevelopers, setAllDevelopers] = useState(null);
   const getDevelopers = async () => {
-    const res = await axios.get('/api/all/dev', {
+    const res = await axios.get(process.env.REACT_APP_PORT + '/api/all/dev', {
       Headers: {
         'Content-Type': 'application/json'
       }
@@ -43,7 +43,7 @@ const Projects = () => {
   }
   console.log(newProject);
   const uploadProject = async () => {
-    const res = await axios.post('/api/create/project', {
+    const res = await axios.post(process.env.REACT_APP_PORT + '/api/create/project', {
       Name: newProject.Name,
       developer: newProject.developer,
       floorNumber: newProject.floorNumber,
@@ -77,7 +77,7 @@ const Projects = () => {
     });
      
     if (willDelete) {
-      const res = await axios.delete('/api/delete/project/'+id,{
+      const res = await axios.delete(process.env.REACT_APP_PORT + '/api/delete/project/'+id,{
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -89,7 +89,7 @@ const Projects = () => {
   }
 
   const updateProject = async(id)=>{
-    const res = await axios.put('/api/update/project/'+id,{
+    const res = await axios.put(process.env.REACT_APP_PORT + '/api/update/project/'+id,{
       Name: newProject.Name,
       developer: newProject.developer,
       floorNumber: newProject.floorNumber,

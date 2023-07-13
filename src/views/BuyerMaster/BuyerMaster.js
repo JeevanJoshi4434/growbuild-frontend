@@ -53,7 +53,7 @@ const BuyerMaster = () => {
   const [Building, setBuilding] = useState(null);
   const [AllProjects, setAllProjects] = useState(null);
   const getProject = async () => {
-    const res = await axios.get('/api/all/project', {
+    const res = await axios.get(process.env.REACT_APP_PORT + '/api/all/project', {
       Headers: {
         'Content-Type': 'application/json'
       }
@@ -66,7 +66,7 @@ const BuyerMaster = () => {
   }, []);
   const getBuildings = async (id) => {
     if ((id?.length === 24 || id?.length === 12) && id !== "Select Project") {
-      const res = await axios.get(`/api/buildings/${id}`, {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/buildings/${id}`, {
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -77,7 +77,7 @@ const BuyerMaster = () => {
   }
   const getUnits = async (id, project) => {
     if ((id?.length === 24 || id?.length === 12) && (project?.length === 24 || project?.length === 12)) {
-      const res = await axios.get(`/api/find/unit/${id}/${project}`, {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/find/unit/${id}/${project}`, {
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -88,7 +88,7 @@ const BuyerMaster = () => {
   }
   const getBuildingDetail = async (id) => {
     if ((id?.length === 24 || id?.length === 12)) {
-      const res = await axios.get(`/api/building/${id}`, {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/building/${id}`, {
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -99,7 +99,7 @@ const BuyerMaster = () => {
   }
 
   const uploadBuyermaster = async () => {
-    const res = await axios.post(`/api/create/buyermaster`, {
+    const res = await axios.post(`${process.env.REACT_APP_PORT}/api/create/buyermaster`, {
       Project: buyerMaster?.Project,
       Building: buyerMaster?.Building,
       floor: buyerMaster?.floor,
@@ -133,7 +133,7 @@ const BuyerMaster = () => {
   const [AllStage, setAllStage] = useState(null);
   const getStage = async (building, project) => {
     if ((building?.length === 12 || building?.length === 24) && (project?.length === 12 || project?.length === 24)) {
-      const res = await axios.get(`/api/demand/${building}/${project}`, {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/demand/${building}/${project}`, {
         Headers: {
           'contnt-type': 'application/json'
         }
@@ -147,7 +147,7 @@ const BuyerMaster = () => {
   const [buyerDetail, setBuyerDetail] = useState(null);
   const getBuyerDetail = async (building, project, unit, flat, floor) => {
     if ((building?.length === 12 || building?.length === 24) && (project?.length === 12 || project?.length === 24) && (unit?.length === 12 || unit?.length === 24) && (flat !== 0 || flat !== null) && (floor !== 0 || floor !== null)) {
-      const res = await axios.get(`/api/${building}/${project}/${unit}/${flat}/${floor}`, {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/${building}/${project}/${unit}/${flat}/${floor}`, {
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -186,7 +186,7 @@ const BuyerMaster = () => {
   }
   const [Demand, setDemand] = useState(null);
   const getDemand = async (id) => {
-    const res = await axios.get(`/api/get/demand/${id}`, {
+    const res = await axios.get(`${process.env.REACT_APP_PORT}/api/get/demand/${id}`, {
       Headers: {
         'Content-Type': 'application/json'
       }
@@ -233,7 +233,7 @@ const BuyerMaster = () => {
 
   const [getData, setGetData] = useState(null);
   const getDataa = async () => {
-    const res = await axios.get(`/api/get/all/buyermaster`, {
+    const res = await axios.get(`${process.env.REACT_APP_PORT}/api/get/all/buyermaster`, {
       Headers: {
         'Content-Type': 'application/json'
       }
@@ -255,7 +255,7 @@ const BuyerMaster = () => {
       });
        
       if (willDelete) {
-        const res = await axios.delete('/api/delete/buyermaster/'+id,{
+        const res = await axios.delete(process.env.REACT_APP_PORT + '/api/delete/buyermaster/'+id,{
           Headers: {
             'Content-Type': 'application/json'
           }
