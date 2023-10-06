@@ -3,12 +3,13 @@ import React, { useState, useEffect } from "react";
 import { Edit, Trash } from "react-feather";
 import { useHistory } from "react-router-dom";
 import swal from "sweetalert";
+import ParkingTable from "./ParkingUti";
 
 
 const renderOptions = (n) => {
   const options = [];
 
-  for (let i = 1; i <= n; i++) {
+  for (let i = 0; i < n; i++) {
     options.push(
       <option key={i} value={i}>
         {i}
@@ -22,7 +23,7 @@ const renderOptions = (n) => {
 const CreateParking = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [CreateParking, setCreateParking] = useState({
-    projectID: null, project: null, floor: null, building: null, parkings: null, Total_Parking_Area_square_feet: null, Single_Parking_Area_square_feet: null, extra_facilities: null, id:null
+    projectID: null, project: null, floor: null, building: null, parkings: null, Total_Parking_Area_square_feet: null, Single_Parking_Area_square_feet: null, extra_facilities: null, id:null,price:null
   })
   const [allBuilding, setAllBuilding] = useState(null);
   const [Building, setBuilding] = useState(null);
@@ -69,7 +70,6 @@ const CreateParking = () => {
       console.log(res.data);
     }
   }
-  console.log({ allBuilding, CreateParking });
   const Createparking = async()=>{
     const res = await axios.post(process.env.REACT_APP_PORT + '/api/create/parking',{
       Project:CreateParking.project,
@@ -78,7 +78,8 @@ const CreateParking = () => {
       parkings:CreateParking.parkings,
       Total_Parking_Area_square_feet:CreateParking.Total_Parking_Area_square_feet,
       Single_Parking_Area_square_feet:CreateParking.Single_Parking_Area_square_feet,
-      extra_facilities:CreateParking.extra_facilities
+      extra_facilities:CreateParking.extra_facilities,
+      price:CreateParking.price
     })
     if(res.status === 200){
       window.alert("Parking Upload Done!");
@@ -104,7 +105,7 @@ const CreateParking = () => {
    setCreateParking({...CreateParking, building:data?.building});
    await getBuildingDetail(data?.building);
    setCreateParking({...CreateParking, floor:data?.floor});
-   setCreateParking({...CreateParking, floor:data?.floor,building:data?.building,projectID: data?.Project, project: data?.Project, parkings: data?.parkings, Total_Parking_Area_square_feet: data?.Total_Parking_Area_square_feet, Single_Parking_Area_square_feet: data?.Single_Parking_Area_square_feet, extra_facilities: data?.extra_facilities,id:data?._id});
+   setCreateParking({...CreateParking, floor:data?.floor,building:data?.building,projectID: data?.Project, project: data?.Project, parkings: data?.parkings, Total_Parking_Area_square_feet: data?.Total_Parking_Area_square_feet, Single_Parking_Area_square_feet: data?.Single_Parking_Area_square_feet, extra_facilities: data?.extra_facilities,id:data?._id,price:data?.price});
   }
   const deleteParking= async(id)=>{
   const willDelete = await swal({
@@ -132,13 +133,30 @@ const CreateParking = () => {
       parkings:CreateParking.parkings,
       Total_Parking_Area_square_feet:CreateParking.Total_Parking_Area_square_feet,
       Single_Parking_Area_square_feet:CreateParking.Single_Parking_Area_square_feet,
-      extra_facilities:CreateParking.extra_facilities
+      extra_facilities:CreateParking.extra_facilities,
+      price:CreateParking.price
     })
     if(res.status===200){
       swal('Building Updated successfully!','success')
       setTimeout(() => {
         history.go(0);
       }, 2000);
+    }
+  }
+  const getProjectName = async(idd)=>{
+    const res = await axios.get(process.env.REACT_APP_PORT+'/api/project/'+idd);
+    if(res.status === 200){
+      return res.data.name;
+    }else{
+      return null;
+    }
+  }
+  const getBuildingName = async(idd)=>{
+    const res = await axios.get(process.env.REACT_APP_PORT+'/api/building/'+idd);
+    if(res.status === 200){
+      return res.data.name;
+    }else{
+      return null;
     }
   }
   return (
@@ -284,7 +302,7 @@ const CreateParking = () => {
               />
             </div>
           </div>
-          <div className="col-md-6 col-12 mb-2">
+          <div className="col-md-4 col-12 mb-2">
             <p className="text-alternate">Total Parking Area In Square Feet</p>
             <div className="input-group">
               <input
@@ -298,7 +316,7 @@ const CreateParking = () => {
               />
             </div>
           </div>
-          <div className="col-md-6 col-12 mb-2">
+          <div className="col-md-4 col-12 mb-2">
             <p className="text-alternate">Single Parking Area In Square Feet</p>
             <div className="input-group">
               <input
@@ -307,6 +325,20 @@ const CreateParking = () => {
                 id="singleParkingArea"
                 name="Single_Parking_Area_square_feet"
                 value={CreateParking.Single_Parking_Area_square_feet}
+                onChange={handleInputs}
+                required=""
+              />
+            </div>
+          </div>
+          <div className="col-md-4 col-12 mb-2">
+            <p className="text-alternate">Price</p>
+            <div className="input-group">
+              <input
+                type="number"
+                className="form-control"
+                id="price"
+                name="price"
+                value={CreateParking.price}
                 onChange={handleInputs}
                 required=""
               />
@@ -345,6 +377,7 @@ const CreateParking = () => {
                       Single_Parking_Area_square_feet: null,
                       extra_facilities: null,
                       id: null,
+                      price:null
                     });
                     setIsEdit(false);
                   }}
@@ -383,33 +416,17 @@ const CreateParking = () => {
               <table className="table table-striped table-responsive">
                 <tr>
                   <th>Sno</th>
+                  <th>Project</th>
+                  <th>Building</th>
                   <th>Parkings</th>
                   <th>Total Parking Area(square feet)</th>
                   <th>Single Parking Area(square feet)</th>
+                  <th>Price</th>
                   <th>Action</th>
                 </tr>
                 {AllParking?.map((i, j) => {
                   let id = i?._id;
-                  console.log(i);
-                  return (
-                    <tr>
-                      <td>{j + 1}</td>
-                      <td>{i?.parkings}</td>
-                      <td>{i?.Total_Parking_Area_square_feet}</td>
-                      <td>{i?.Single_Parking_Area_square_feet}</td>
-                      <td>
-                        <Edit className="cursor-pointer" color="green" size={30} onClick={() => { edit(i) }} />
-                        <Trash
-                          className="cursor-pointer"
-                          color="red"
-                          size={30}
-                          onClick={() => {
-                            deleteParking(id);
-                          }}
-                        />
-                      </td>
-                    </tr>
-                  );
+                  return  <ParkingTable i={i} j={j} setIsEdit={setIsEdit} setCreateParking={setCreateParking} CreateParking={CreateParking} setAllBuilding={setAllBuilding} setBuilding={setBuilding} setAllParking={setAllParking} id={id} />;
                 })}
               </table>
             </div>

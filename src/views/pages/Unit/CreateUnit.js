@@ -5,11 +5,12 @@ import { useHistory } from "react-router-dom";
 import axios from 'axios';
 import { Edit, Trash } from "react-feather";
 import swal from "sweetalert";
+import UnitTable from "./UnitTable";
 const CreateUnit = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [allUnit, setAllUnit] = useState(null);
   const [CreateUnit, setCreateUnit] = useState({
-    Project: null, building: null, unit_name: null, total_area_this_unit: null, carpet_area: null, build_up_area: null, balcony_area: null, total_number_of_flat_on_this_unit: null, parking_detail: null, extra_facilities: null, id: null
+    Project: null, building: null, unit_name: null, total_area_this_unit: null, carpet_area: null, build_up_area: null, balcony_area: null, total_number_of_flat_on_this_unit: null, parking_detail: null, extra_facilities: null, id: null,price:null,TotalPrice:null
   });
   const [allBuilding, setAllBuilding] = useState(null);
   const [Building, setBuilding] = useState(null);
@@ -38,7 +39,7 @@ const CreateUnit = () => {
         Headers: {
           'Content-Type': 'application/json'
         }
-      }
+      }  
       );
       setAllBuilding(res.data);
       console.log(res.data);
@@ -56,7 +57,22 @@ const CreateUnit = () => {
       console.log(res.data);
     }
   }
-
+  const getProjectName = async(idd)=>{
+    const res = await axios.get(process.env.REACT_APP_PORT+'/api/project/'+idd);
+    if(res.status === 200){
+      return res.data.name;
+    }else{
+      return null;
+    }
+  }
+  const getBuildingName = async(idd)=>{
+    const res = await axios.get(process.env.REACT_APP_PORT+'/api/building/'+idd);
+    if(res.status === 200){
+      return res.data.name;
+    }else{
+      return null;
+    }
+  }
   const createUnit = async () => {
     const res = await axios.post(process.env.REACT_APP_PORT + '/api/create/unit', {
       Project: CreateUnit.Project,
@@ -68,7 +84,9 @@ const CreateUnit = () => {
       balcony_area: CreateUnit.balcony_area,
       total_number_of_flat_on_this_unit: CreateUnit.total_number_of_flat_on_this_unit,
       parking_detail: CreateUnit.parking_detail,
-      extra_facilities: CreateUnit.extra_facilities
+      extra_facilities: CreateUnit.extra_facilities,
+      price:CreateUnit.price,
+      totalPrice:CreateUnit.TotalPrice
     })
     if (res.status === 200) {
       window.alert("Unit Upload Done!");
@@ -88,7 +106,7 @@ const CreateUnit = () => {
     setCreateUnit({ ...CreateUnit, Project: data?.Project, building: data?.building, unit_name: data?.unit_name, total_area_this_unit: data?.total_area_this_unit, carpet_area: data?.carpet_area, build_up_area: data?.build_up_area, balcony_area: data?.balcony_area, total_number_of_flat_on_this_unit: data?.total_number_of_flat_on_this_unit, parking_detail: data?.parking_detail, extra_facilities: data?.extra_facilities, id: data?._id });
     setIsEdit(true)
     await getBuildings(data?.Project);
-    setCreateUnit({ ...CreateUnit, Project: data?.Project, building: data?.building, unit_name: data?.unit_name, total_area_this_unit: data?.total_area_this_unit, carpet_area: data?.carpet_area, build_up_area: data?.build_up_area, balcony_area: data?.balcony_area, total_number_of_flat_on_this_unit: data?.total_number_of_flat_on_this_unit, parking_detail: data?.parking_detail, extra_facilities: data?.extra_facilities, id: data?._id });
+    setCreateUnit({ ...CreateUnit, Project: data?.Project, building: data?.building, unit_name: data?.unit_name, total_area_this_unit: data?.total_area_this_unit, carpet_area: data?.carpet_area, build_up_area: data?.build_up_area, balcony_area: data?.balcony_area, total_number_of_flat_on_this_unit: data?.total_number_of_flat_on_this_unit, parking_detail: data?.parking_detail, extra_facilities: data?.extra_facilities, id: data?._id,price:data?.price,TotalPrice:data?.totalPrice });
   }
 
   const updateUnit = async (id) => {
@@ -102,7 +120,9 @@ const CreateUnit = () => {
       balcony_area: CreateUnit.balcony_area,
       total_number_of_flat_on_this_unit: CreateUnit.total_number_of_flat_on_this_unit,
       parking_detail: CreateUnit.parking_detail,
-      extra_facilities: CreateUnit.extra_facilities
+      extra_facilities: CreateUnit.extra_facilities,
+      price:CreateUnit.price,
+      totalPrice:CreateUnit.TotalPrice
     })
     if (res.status === 200) {
       swal("Unit Updated!");
@@ -124,6 +144,16 @@ const CreateUnit = () => {
   useEffect(() => {
     getAllUnits();
   }, [])
+
+  const setTotalPrice = ()=>{
+    if(CreateUnit.total_area_this_unit != null && CreateUnit.price != null)
+    {
+      let Saleable = document.getElementById('totalArea');
+      let sqft = document.getElementById('price');
+      let total = document.getElementById('TotalPrice');
+      total.value = Saleable.value * sqft.value;
+    }
+  }
   
   return (
     <>
@@ -194,14 +224,14 @@ const CreateUnit = () => {
             </div>
           </div>
           <div className="col-md-6 col-12 mb-2">
-            <p className="text-alternate">Total Area This Unit</p>
+            <p className="text-alternate">Saleable Area This Unit</p>
             <div className="input-group">
               <input
                 type="number"
                 className="form-control"
                 id="totalArea"
                 name="total_area_this_unit"
-                onChange={handleInputs}
+                onChange={(e)=>{handleInputs(e); setTotalPrice();}}
                 value={CreateUnit.total_area_this_unit}
                 required=""
               />
@@ -235,7 +265,7 @@ const CreateUnit = () => {
               />
             </div>
           </div>
-          <div className="col-md-6 col-12 mb-2">
+          <div className="col-md-4 col-12 mb-2">
             <p className="text-alternate">Balcony Area</p>
             <div className="input-group">
               <input
@@ -249,7 +279,7 @@ const CreateUnit = () => {
               />
             </div>
           </div>
-          <div className="col-md-6 col-12 mb-2">
+          {/* <div className="col-md-6 col-12 mb-2">
             <p className="text-alternate">Total No Of Flat On This Unit</p>
             <div className="input-group">
               <input
@@ -262,8 +292,8 @@ const CreateUnit = () => {
                 required=""
               />
             </div>
-          </div>
-          <div className="col-md-6 col-12 mb-2">
+          </div> */}
+          {/* <div className="col-md-6 col-12 mb-2">
             <p className="text-alternate">Parking Details</p>
             <div className="input-group">
               <span className="input-group-text">
@@ -283,6 +313,36 @@ const CreateUnit = () => {
                 name='parking_detail'
                 onChange={handleInputs}
                 value={CreateUnit.parking_detail}
+              />
+            </div>
+          </div> */}
+          <div className="col-md-4 col-12 mb-2">
+            <p className="text-alternate">Price per sq.ft</p>
+            <div className="input-group">
+              <input
+                type="number"
+                aria-label="price"
+                placeholder="Enter Price"
+                className="form-control"
+                name='price'
+                id='price'
+                onChange={(e)=>{handleInputs(e); setTotalPrice();}}
+                value={CreateUnit.price}
+              />
+            </div>
+          </div>
+          <div className="col-md-4 col-12 mb-2">
+            <p className="text-alternate">Total Price</p>
+            <div className="input-group">
+              <input
+                type="number"
+                aria-label="Total Price"
+                placeholder="Total Price"
+                className="form-control"
+                name='TotalPrice'
+                id='TotalPrice'
+                onChange={handleInputs}
+                value={CreateUnit.TotalPrice}
               />
             </div>
           </div>
@@ -322,6 +382,7 @@ const CreateUnit = () => {
                       extra_facilities: null, id: null
                     });
                     setIsEdit(false);
+                    
                   }}
                 >
                   {" "}
@@ -353,42 +414,25 @@ const CreateUnit = () => {
             className="row px-4 py-4 mx-2 my-2 shadow-lg needs-validation"
             novalidate
           >
-            <h3 className="text-alternate text-primary">All Parkings</h3>
+            <h3 className="text-alternate text-primary">All Units</h3>
             <div className="d-flex justify-content-center">
               <table className="table table-striped table-responsive">
                 <tr>
                   <th>Sno</th>
+                  <th>Project</th>
+                  <th>Building</th>
                   <th>Unit Name</th>
                   <th>Balcony Area</th>
                   <th>Build Up Area</th>
                   <th>Carpet Area</th>
-                  <th>Total Area</th>
+                  <th>Saleable Area</th>
+                  <th>Price per sq. ft</th>
+                  <th>Total Price</th>
                   <th>Action</th>
                 </tr>
                 {allUnit?.map((i, j) => {
                   let id = i?._id;
-                  console.log(i);
-                  return (
-                    <tr>
-                      <td>{j + 1}</td>
-                      <td>{i?.unit_name}</td>
-                      <td>{i?.balcony_area}</td>
-                      <td>{i?.build_up_area}</td>
-                      <td>{i?.carpet_area}</td>
-                      <td>{i?.total_area_this_unit}</td>
-                      <td>
-                        <Edit className="cursor-pointer" color="green" size={30} onClick={() => { edit(i) }} />
-                        <Trash
-                          className="cursor-pointer"
-                          color="red"
-                          size={30}
-                          onClick={() => {
-                            deleteUnit(id);
-                          }}
-                        />
-                      </td>
-                    </tr>
-                  );
+                  return <UnitTable i={i} j={j} setIsEdit={setIsEdit} setAllUnit={setAllUnit} setCreateUnit={setCreateUnit} setAllBuilding={setAllBuilding} CreateUnit={CreateUnit} id={id}  />;
                 })}
               </table>
             </div>

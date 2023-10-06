@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import axios from 'axios';
 import swal from "sweetalert";
 import { Edit, Trash } from "react-feather";
+import FlatTable from "./FlatUtils";
 
 
 const renderOptions = (n) => {
@@ -38,7 +39,7 @@ const CreateFlat = () => {
   const [isEdit, setIsEdit] = useState(false);  
   const [allUnits, setAllUnits] = useState(null);
   const [CreateFlat, setCreateFlat] = useState({
-    Project: null, floor: null, building: null, unit: null, flat: null, flat_area: null, parking: null, starting_price: null, extra_facilities: null,id:null
+    bedRoom:null,Project: null, floor: null, building: null, unit: null, flat: null, flat_area: null, parking: null, starting_price: null, extra_facilities: null,id:null
   });
   const [allBuilding, setAllBuilding] = useState(null);
   const [Building, setBuilding] = useState(null);
@@ -55,7 +56,7 @@ const CreateFlat = () => {
         'Content-Type': 'application/json'
       }
     })
-    setAllProjects(res.data);
+    setAllProjects(res?.data);
   }
   var history = useHistory();
   useEffect(() => {
@@ -105,7 +106,8 @@ const CreateFlat = () => {
       flat_area: CreateFlat.flat_area,
       parking: CreateFlat.parking,
       starting_price: CreateFlat.starting_price,
-      extra_facilities: CreateFlat.extra_facilities
+      extra_facilities: CreateFlat.extra_facilities,
+      bedRoom:CreateFlat.bedRoom
     })
     if (res.status === 200) {
       window.alert("Flat Upload Done!");
@@ -123,7 +125,7 @@ const CreateFlat = () => {
     setCreateFlat({...CreateFlat,floor: data?.floor, flat: data?.flat});
     await getUnits(data?.building,data?.Project);
     setCreateFlat({...CreateFlat,unit: data?.unit});
-    setCreateFlat({...CreateFlat, Project: data?.Project, floor: data?.floor, building: data?.building, unit: data?.unit, flat: data?.flat, flat_area: data?.flat_area, parking: data?.parking, starting_price: data?.starting_price, extra_facilities: data?.extra_facilities,id:data?._id});
+    setCreateFlat({...CreateFlat, Project: data?.Project, floor: data?.floor, building: data?.building, unit: data?.unit, flat: data?.flat, flat_area: data?.flat_area, parking: data?.parking, starting_price: data?.starting_price, extra_facilities: data?.extra_facilities,id:data?._id,bedRoom:data?.bedRoom});
    }
    const deleteFlat= async(id)=>{
    const willDelete = await swal({
@@ -153,7 +155,8 @@ const CreateFlat = () => {
        flat_area: CreateFlat.flat_area,
        parking: CreateFlat.parking,
        starting_price: CreateFlat.starting_price,
-       extra_facilities: CreateFlat.extra_facilities
+       extra_facilities: CreateFlat.extra_facilities,
+       bedRoom:CreateFlat.bedRoom
      })
      if(res.status===200){
        swal('Building Updated successfully!','success')
@@ -174,6 +177,29 @@ const CreateFlat = () => {
   useEffect(() => {
     getAllFlat();
   }, [])
+  const getProjectName = async(idd)=>{
+    const res = await axios.get(process.env.REACT_APP_PORT+'/api/project/'+idd);
+    if(res.status === 200){
+      return res.data.name;
+    }else{
+      return null;
+    }
+  }
+  const getBuildingName = async(idd)=>{
+    const res = await axios.get(process.env.REACT_APP_PORT+'/api/building/'+idd);
+    if(res.status === 200){
+      return res.data.name;
+    }else{
+      return null;
+    }
+  }
+  const [currentFloor, setCurrentFloor] = useState(0);
+
+  const filteredUnits =
+    allUnits?.filter(allUnits =>{
+      const unitFloor = allUnits?.unit_name.charAt(0);
+      return unitFloor === currentFloor.toString();
+    });
   
   return (
     <>
@@ -197,24 +223,6 @@ const CreateFlat = () => {
                     <option name={i?._id} value={i?._id}>{i?.Name}</option>
                   )
                 })
-                }
-              </select>
-            </div>
-          </div>
-          <div className="col-md-6 col-12 mb-2">
-            <p className="text-alternate">Select Floor</p>
-            <div className="input-group">
-              <select className="form-control" id="floor" name="floor" onChange={handleInputs} value={CreateFlat.floor}>
-                {Building === null ?
-                  <option value={null} name={null}>Loading...</option>
-                  : <option value={null} name={null}>Select Floor</option>}
-                {Building !== null && Building?.total_number_of_floors === 0 &&
-                  <option value={null} name={null}>No Floor Avaliable</option>
-                }
-                {
-                  Building !== null &&
-                  Building?.total_number_of_floors > 0 &&
-                  renderOptions(Building?.total_number_of_floors)
                 }
               </select>
             </div>
@@ -246,6 +254,24 @@ const CreateFlat = () => {
               </select>
             </div>
           </div>
+           <div className="col-md-6 col-12 mb-2">
+            <p className="text-alternate">Select Floor</p>
+            <div className="input-group">
+              <select className="form-control" id="floor" name="floor" onChange={(e)=>{handleInputs(e);setCurrentFloor(e.target.value);console.log(filteredUnits);}} value={CreateFlat.floor}>
+                {Building === null ?
+                  <option value={null} name={null}>Loading...</option>
+                  : <option value={null} name={null}>Select Floor</option>}
+                {Building !== null && Building?.total_number_of_floors === 0 &&
+                  <option value={null} name={null}>No Floor Avaliable</option>
+                }
+                {
+                  Building !== null &&
+                  Building?.total_number_of_floors > 0 &&
+                  renderOptions(Building?.total_number_of_floors)
+                }
+              </select>
+            </div>
+          </div>
           <div className="col-md-6 col-12 mb-2">
             <p className="text-alternate">Select Unit</p>
             <div className="input-group">
@@ -255,12 +281,12 @@ const CreateFlat = () => {
                 {CreateFlat.building !== null && CreateFlat.Project !== null && allUnits === null && <option value={null} name={null}>Loading...</option>}
                 {allUnits !== null &&
                   <>
-                    {allUnits.length === 0
+                    {filteredUnits.length === 0
                       ? <option value={null} name={null}>No Units Avaliable.</option>
                       : <option value={null} name={null}>Select Unit</option>
 
                     }
-                    {allUnits.length > 0 && allUnits.map((i) => {
+                    {filteredUnits.length > 0 && filteredUnits.map((i) => {
                       return (
                         <option value={i?._id} name={i?._id}>{i?.unit_name}</option>
                       )
@@ -270,7 +296,7 @@ const CreateFlat = () => {
               </select>
             </div>
           </div>
-          <div className="col-md-6 col-12 mb-2">
+          {/* <div className="col-md-6 col-12 mb-2">
             <p className="text-alternate">Select Flat</p>
             <div className="input-group">
               <select className="form-control" id="flat" name="flat" value={CreateFlat.flat} onChange={handleInputs} >
@@ -287,8 +313,8 @@ const CreateFlat = () => {
                 }
               </select>
             </div>
-          </div>
-          <div className="col-md-6 col-12 mb-2">
+          </div> */}
+          <div className="col-md-4 col-12 mb-2">
             <p className="text-alternate">Flat Area</p>
             <div className="input-group">
               <input
@@ -302,7 +328,7 @@ const CreateFlat = () => {
               />
             </div>
           </div>
-          <div className="col-md-6 col-12 mb-2">
+          {/* <div className="col-md-6 col-12 mb-2">
             <p className="text-alternate">Parking</p>
             <div className="input-group">
               <span className="input-group-text">
@@ -325,8 +351,22 @@ const CreateFlat = () => {
                 onChange={handleInputs}
               />
             </div>
+          </div> */}
+          <div className="col-md-4 col-12 mb-2">
+            <p className="text-alternate">Bed Room</p>
+            <div className="input-group">
+              <input
+                type="text"
+                className="form-control"
+                id="bedRoom"
+                name="bedRoom"
+                value={CreateFlat.bedRoom}
+                onChange={handleInputs}
+                required=""
+              />
+            </div>
           </div>
-          <div className="col-md-6 col-12 mb-2">
+          <div className="col-md-4 col-12 mb-2">
             <p className="text-alternate">Starting Price</p>
             <div className="input-group">
               <input
@@ -364,7 +404,7 @@ const CreateFlat = () => {
                   onClick={() => {
                     setCreateFlat({
                       ...CreateFlat,
-                      Project: null, floor: null, building: null, unit: null, flat: null, flat_area: null, parking: null, starting_price: null, extra_facilities: null,id:null
+                      Project: null, floor: null, building: null, unit: null, flat: null, flat_area: null, parking: null, starting_price: null, extra_facilities: null,id:null,bedRoom:null
                     });
                     setIsEdit(false);
                   }}
@@ -404,35 +444,19 @@ const CreateFlat = () => {
               <table className="table table-striped table-responsive">
                 <tr>
                   <th>Sno.</th>
+                  <th>Project</th>
+                  <th>Building</th>
                   <th>Flat</th>
                   <th>Floor</th>
                   <th>Flat Area</th>
+                  <th>Bed Room</th>
                   <th>Starting Price</th>
                   <th>Action</th>
                 </tr>
                 {allFlat?.map((i, j) => {
                   let id = i?._id;
                   console.log(i);
-                  return (
-                    <tr>
-                      <td>{j + 1}</td>
-                      <td>{i?.flat}</td>
-                      <td>{i?.floor}</td>
-                      <td>{i?.flat_area}</td>
-                      <td>{i?.starting_price}</td>
-                      <td>
-                        <Edit className="cursor-pointer" color="green" size={30} onClick={() => { edit(i) }} />
-                        <Trash
-                          className="cursor-pointer"
-                          color="red"
-                          size={30}
-                          onClick={() => {
-                            deleteFlat(id);
-                          }}
-                        />
-                      </td>
-                    </tr>
-                  );
+                  return <FlatTable i={i} j={j} setIsEdit={setIsEdit} setCreateFlat={setCreateFlat} CreateFlat={CreateFlat} setAllBuilding={setAllBuilding} setBuilding={setBuilding} setAllUnits={setAllUnits} setAllFlat={setAllFlat} id={id} />;
                 })}
               </table>
             </div>

@@ -20,6 +20,7 @@ const AddStage = lazy(() => import("./views/pages/Deemand/CreateStage"));
 const AllDeemand = lazy(() => import("./views/pages/Deemand/AllStage"));
 const AddFlat = lazy(() => import("./views/pages/Flat/CreateFlat"));
 const AllFlat = lazy(() => import("./views/pages/Flat/ViewFlat"));
+const PaymentStatus = lazy(() => import("./views/pages/PaymentStatus/PaymentStatus"));
 const AddParking = lazy(() =>
   import("./views/pages/Parkings/CreateParking.js")
 );
@@ -282,6 +283,7 @@ class AppRouter extends React.Component {
           <AppRoute exact path="/parking/create" component={AddParking} />
           <AppRoute exact path="/unit/all" component={AllUnit} />
           <AppRoute exact path="/unit/create" component={AddUnit} />
+          <AppRoute exact path="/payment/status" component={PaymentStatus} />
           <AppRoute
             exact
             path="/booking-status/view"

@@ -100,7 +100,7 @@ const navigationConfig = [
 
   {
     id: "CreateFlat",
-    title: "Flats",
+    title: "Unit Details",
     type: "item",
     icon: <Icon.Menu size={16} />,
     permissions: ["admin", "editor"],
@@ -163,6 +163,14 @@ const navigationConfig = [
     icon: <Icon.CreditCard size={20} />,
     permissions: ["admin", "editor"],
     navLink: "/buyer-master",
+  },
+  {
+    id: "paymentStatus",
+    title: "Payment Status",
+    type: "item",
+    icon: <Icon.Clock size={20} />,
+    permissions: ["admin", "editor"],
+    navLink: "/payment/status",
   },
   {
     id: "paymentRecieve",

@@ -36,7 +36,7 @@ const renderFlat = (n) => {
 
 const BuyerMaster = () => {
   const [buyerMaster, setBuyerMaster] = useState({
-    Project: null, Building: null, floor: null, unit: null, secondfloor: null, flat: null, parking: null, booking_price: null, booking_date: null, allotment_date: null, agreement_date: null, Owner_name: null, payment_stage: null, price: null, payment_receive: null, payment_type: null, check_number: null, date: null, bank_name: null, branch_name: null, bank_account: null, card_number: null, id: null
+    Project: null, Building: null, floor: null, unit: null, secondfloor: null, flat: null, parking: null, booking_price: null, booking_date: null, allotment_date: null, agreement_date: null, Owner_name: null, payment_stage: null, price: null, payment_receive: null, payment_type: null, check_number: null, date: null, bank_name: null, branch_name: null, bank_account: null, card_number: null, id: null,price_with_tax: null
   });
 
 
@@ -121,7 +121,8 @@ const BuyerMaster = () => {
       bank_name: buyerMaster?.bank_name,
       branch_name: buyerMaster?.branch_name,
       bank_account: buyerMaster?.bank_account,
-      card_number: buyerMaster?.card_number
+      card_number: buyerMaster?.card_number,
+      price_with_tax: buyerMaster?.price_with_tax
     })
     if (res.status === 200) {
       window.alert('Updated Successfully!');
@@ -178,7 +179,8 @@ const BuyerMaster = () => {
           bank_name: buyerMaster?.bank_name,
           branch_name: buyerMaster?.branch_name,
           bank_account: buyerMaster?.bank_account,
-          card_number: buyerMaster?.card_number
+          card_number: buyerMaster?.card_number,
+          price_with_tax: buyerMaster?.price_with_tax
         })
         setBuyerDetail(data);
       }
@@ -217,7 +219,8 @@ const BuyerMaster = () => {
         bank_name: buyerMaster?.bank_name,
         branch_name: buyerMaster?.branch_name,
         bank_account: buyerMaster?.bank_account,
-        card_number: buyerMaster?.card_number
+        card_number: buyerMaster?.card_number,
+        price_with_tax: buyerMaster?.price_with_tax
       })
     }
   }
@@ -435,11 +438,17 @@ const BuyerMaster = () => {
                     )}
                     {allUnits.length > 0 &&
                       allUnits.map((i) => {
-                        return (
+                        let s= "";
+                        s=i.unit_name;
+                        s=s.slice(0,1);
+                        if(s===buyerMaster.floor)
+                        {
+                          return (
                           <option value={i?._id} name={i?._id}>
                             {i?.unit_name}
                           </option>
                         );
+                        }
                       })}
                   </>
                 )}
@@ -447,7 +456,7 @@ const BuyerMaster = () => {
             </div>
           </div>
 
-          <div className="col-md-4 col-12 mb-2">
+          {/* <div className="col-md-4 col-12 mb-2">
             <p className="text-alternate">Select Flat</p>
             <div className="input-group">
               <select
@@ -487,10 +496,10 @@ const BuyerMaster = () => {
                   renderFlat(Building?.total_number_of_flats)}
               </select>
             </div>
-          </div>
+          </div> */}
           <div className="col-md-6 col-12 mb-2">
             <p className="text-alternate">Fetch Details</p>
-            {buyerMaster?.flat !== null ?
+            {buyerMaster?.unit !== null ?
               <button type="button" className="btn btn-primary" onClick={() => fetchDetail(buyerMaster?.payment_stage)}>Fetch Details</button> :
               <button className="btn btn-primary" disabled >Fetch Details</button>}
           </div>

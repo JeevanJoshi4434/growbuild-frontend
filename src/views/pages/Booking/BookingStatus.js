@@ -1,8 +1,6 @@
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom';
-import { Input } from 'reactstrap'
-import { RequiredField } from '../../../utility/RequiredField'
 
 const renderOptions = (n) => {
 
@@ -97,8 +95,8 @@ const BookingStatus = () => {
   }
 
   const getDetails = async (building, project, unit, flat, floor) => {
-    if ((building.length === 12 || building.length === 24) && (project.length === 12 || project.length === 24) && (unit.length === 12 || unit.length === 24) && (flat !== 0|| flat !== null) && (floor !== 0||floor !== null) ) {
-      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/${building}/${project}/${unit}/${flat}/${floor}`, {
+    if ((building.length === 12 || building.length === 24) && (project.length === 12 || project.length === 24) && (unit.length === 12 || unit.length === 24) && (floor !== 0||floor !== null) ) {
+      const res = await axios.get(`${process.env.REACT_APP_PORT}/api/${building}/${project}/${unit}/${floor}`, {
         Headers: {
           'Content-Type': 'application/json'
         }
@@ -237,7 +235,7 @@ const BookingStatus = () => {
               </select>
             </div>
           </div>
-          <div className="col-md-4 col-12 mb-2">
+          {/* <div className="col-md-4 col-12 mb-2">
             <p className="text-alternate">Select Flat</p>
             <div className="input-group">
               <select className="form-control" id="flat" name="flat" value={CreateFlat.flat} onChange={(e)=>{handleInputs(e);}} >
@@ -254,7 +252,7 @@ const BookingStatus = () => {
                 }
               </select>
             </div>
-          </div>
+          </div> */}
           <div className="col-md-4 col-12 mb-2">
             <p className="text-alternate">Fetch Data</p>
             <button type='button' className='btn btn-primary ' onClick={()=>getDetails(CreateFlat.building,CreateFlat.Project,CreateFlat.unit,CreateFlat.flat,CreateFlat.floor)} >Fetch Booking</button>

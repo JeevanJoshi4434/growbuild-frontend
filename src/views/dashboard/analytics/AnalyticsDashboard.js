@@ -25,6 +25,7 @@ let $primary = "#7367F0",
 
 class AnalyticsDashboard extends React.Component {
   render() {
+    
     return (
       <React.Fragment>
         <Row className="match-height">

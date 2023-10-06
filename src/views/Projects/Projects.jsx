@@ -117,7 +117,7 @@ const Projects = () => {
         <div className="row px-4 py-4 mx-2 my-2 shadow-lg">
           <h3 className="text-alternate text-primary">Create Project</h3>
           <hr />
-          <div className="col-md-12 col-12">
+          <div className="col-md-6 col-12">
             <p className="text-alternate">Project Name</p>
             <div className="input-group mb-2">
               <input
@@ -140,7 +140,7 @@ const Projects = () => {
                 {AllDevelopers !== null && AllDevelopers?.map((i) => {
                   return (
                     <>
-                      <option name={i?._id} value={i?._id}>{i?.name}</option>
+                      <option name={i?._id} value={i?._id}>{i?.Company}</option>
                     </>
                   )
                 })
@@ -148,7 +148,7 @@ const Projects = () => {
               </select>
             </div>
           </div>
-          <div className="col-md-6 col-12">
+          {/* <div className="col-md-6 col-12">
             <p className="text-alternate">Enter No Of Floor</p>
             <div className="input-group mb-2">
               <input
@@ -161,7 +161,7 @@ const Projects = () => {
                 required=""
               />
             </div>
-          </div>
+          </div> */}
           <div className="col-md-6 col-12">
             <p className="text-alternate">Start Date</p>
             <div className="input-group mb-2">
@@ -190,7 +190,7 @@ const Projects = () => {
               />
             </div>
           </div>
-          <div className="col-md-4 col-12">
+          {/* <div className="col-md-4 col-12">
             <p className="text-alternate ">Compound Interest (in %)</p>
             <div className="input-group mb-2">
               <span className="input-group-text">
@@ -212,7 +212,7 @@ const Projects = () => {
                 value={newProject.CI}
               />
             </div>
-          </div>
+          </div> */}
           <div className="col-md-4 col-12">
             <p className="text-alternate">Demand</p>
             <div className="input-group mb-2">
@@ -241,33 +241,7 @@ const Projects = () => {
               />
             </div>
           </div>
-          <div className="col-md-5 col-12">
-            <p className="text-alternate">Location</p>
-            <div className="input-group mb-2">
-              <textarea
-                className="form-control"
-                id="location"
-                name="location"
-                onChange={handleInputs}
-                value={newProject.location}
-                required=""
-              ></textarea>
-            </div>
-          </div>
-          <div className="col-md-7 col-12">
-            <p className="text-alternate">Address</p>
-            <div className="input-group mb-2">
-              <textarea
-                className="form-control"
-                id="address"
-                name="address"
-                onChange={handleInputs}
-                value={newProject.address}
-                required=""
-              ></textarea>
-            </div>
-          </div>
-          <div className="col-md-6 col-12">
+          <div className="col-md-4 col-12">
             <p className="text-alternate">Owner</p>
             <div className="input-group mb-2">
               <input
@@ -282,6 +256,33 @@ const Projects = () => {
             </div>
           </div>
           <div className="col-md-6 col-12">
+            <p className="text-alternate">Location</p>
+            <div className="input-group mb-2">
+              <textarea
+                className="form-control"
+                id="location"
+                name="location"
+                onChange={handleInputs}
+                value={newProject.location}
+                required=""
+              ></textarea>
+            </div>
+          </div>
+          <div className="col-md-6 col-12">
+            <p className="text-alternate">Address</p>
+            <div className="input-group mb-2">
+              <textarea
+                className="form-control"
+                id="address"
+                name="address"
+                onChange={handleInputs}
+                value={newProject.address}
+                required=""
+              ></textarea>
+            </div>
+          </div>
+          
+          {/* <div className="col-md-6 col-12">
             <p className="text-alternate">Profit Centre</p>
             <div className="input-group mb-2">
               <input
@@ -294,7 +295,7 @@ const Projects = () => {
                 required=""
               />
             </div>
-          </div>
+          </div> */}
           <div className="col-md-12 col-12">
             <p className="text-alternate">Description</p>
             <div className="input-group mb-2">
@@ -319,7 +320,7 @@ const Projects = () => {
         </div>
 
         {!isEdit && <form
-          className="row px-4 py-4 mx-2 my-2 shadow-lg needs-validation"
+          className="row  px-4 py-4 mx-2 my-2 shadow-lg needs-validation"
           novalidate
         >
           <h3 className="text-alternate text-primary">All Developer</h3>

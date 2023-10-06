@@ -35,7 +35,7 @@ const SetBooking = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [AllBooking, setAllBooking] = useState(null);
   const [Booking, setBooking] = useState({
-    Project: null, building: null, floor: null, unit: null, flat: null, parking: null, booking_price: null, booking_date: null, allotment_date: null, agreement_date: null, first_applicant_name: null, first_applicant_father_name: null, first_applicant_husband_name: null, first_applicant_permanentAddress: null, first_applicant_correspondAddress: null, first_applicant_contactNumber: null, first_applicant_email: null, first_applicant_dob: null, first_applicant_AadharNumber: null, first_applicant_pan_number: null, first_applicant_City: null, first_applicant_police_station: null, first_applicant_country: null, first_applicant_occupation: null, first_applicant_religion: null, first_applicant_status: null, second_applicant_name: null, second_applicant_father_name: null, second_applicant_husband_name: null, second_applicant_contact_number: null, second_applicant_email: null, second_applicant_dob: null, second_applicant_pan_number: null, second_applicant_occupation: null, second_applicant_address: null, second_applicant_relation_with_first_applicant: null, third_applicant_name: null, third_applicant_phone_number: null, fourth_applicant_name: null, fourth_applicant_phone_number: null, second_applicant_adhar_number: null, id:null
+    Project: null, building: null, floor: null, unit: null, flat: null, parking: null, booking_price: null, booking_date: null, allotment_date: null, agreement_date: null, first_applicant_name: null, first_applicant_father_name: null, first_applicant_husband_name: null, first_applicant_permanentAddress: null, first_applicant_correspondAddress: null, first_applicant_contactNumber: null, first_applicant_email: null, first_applicant_dob: null, first_applicant_AadharNumber: null, first_applicant_pan_number: null, first_applicant_City: null, first_applicant_police_station: null, first_applicant_country: null, first_applicant_occupation: null, first_applicant_religion: null, first_applicant_status: null, second_applicant_name: null, second_applicant_father_name: null, second_applicant_husband_name: null, second_applicant_contact_number: null, second_applicant_email: null, second_applicant_dob: null, second_applicant_pan_number: null, second_applicant_occupation: null, second_applicant_address: null, second_applicant_relation_with_first_applicant: null, third_applicant_name: null, third_applicant_phone_number: null, fourth_applicant_name: null, fourth_applicant_phone_number: null, second_applicant_adhar_number: null, id:null,price_with_tax:null,parking_price:null,totalAmount:null
   })
   const uploadBooking = async () => {
     const res = await axios.post(process.env.REACT_APP_PORT + '/api/create/booking', {
@@ -79,7 +79,8 @@ const SetBooking = () => {
       third_applicant_phone_number: Booking?.third_applicant_phone_number,
       fourth_applicant_name: Booking?.fourth_applicant_name,
       fourth_applicant_phone_number: Booking?.fourth_applicant_phone_number,
-      second_applicant_adhar_number: Booking?.second_applicant_adhar_number
+      second_applicant_adhar_number: Booking?.second_applicant_adhar_number,
+      price_with_tax:Booking.price_with_tax
     })
     if (res.status === 200) {
       window.alert("Booking created successfully");
@@ -181,7 +182,9 @@ const SetBooking = () => {
       third_applicant_phone_number: data?.third_applicant_phone_number,
       fourth_applicant_name: data?.fourth_applicant_name,
       fourth_applicant_phone_number: data?.fourth_applicant_phone_number,
-      second_applicant_adhar_number: data?.second_applicant_adhar_number
+      second_applicant_adhar_number: data?.second_applicant_adhar_number,
+      price_with_tax:data?.price_with_tax,
+      totalAmount:data?.totalAmount
      });
     setIsEdit(true)
     await getBuildings(data.Project);
@@ -229,7 +232,9 @@ const SetBooking = () => {
       fourth_applicant_name: data?.fourth_applicant_name,
       fourth_applicant_phone_number: data?.fourth_applicant_phone_number,
       second_applicant_adhar_number: data?.second_applicant_adhar_number,
-      id:data?._id
+      id:data?._id,
+      price_with_tax:data?.price_with_tax,
+      totalAmount:data?.totalAmount
      });
   }
   const getAllBooking = async () => {
@@ -304,7 +309,9 @@ const SetBooking = () => {
       third_applicant_phone_number: Booking?.third_applicant_phone_number,
       fourth_applicant_name: Booking?.fourth_applicant_name,
       fourth_applicant_phone_number: Booking?.fourth_applicant_phone_number,
-      second_applicant_adhar_number: Booking?.second_applicant_adhar_number
+      second_applicant_adhar_number: Booking?.second_applicant_adhar_number,
+      price_with_tax:Booking?.price_with_tax,
+      totalAmount:Booking?.totalAmount
     })
     if (res.status === 200) {
       swal('Building Updated successfully!', 'success')
@@ -314,11 +321,51 @@ const SetBooking = () => {
     }
   }
 
+  const getPrice = async()=>{
+    const data = {
+      Project: Booking.Project,
+      building: Booking.building
+    };
+    
+    const res = await axios.post(`${process.env.REACT_APP_PORT}/api/booking/parking`, data, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    if(res.data?.status === 200){
+    setBooking(prevBooking => ({
+      ...prevBooking,
+      parking_price:res.data?.price
+       
+    }));
+  }else{
+    setBooking(prevBooking => ({
+      ...prevBooking,
+      parking_price:"price not assigned!."
+       
+    }));
+  }
+  }
+
   const closeEdit = ()=>{
     setBooking({...Booking,Project: null, building: null, floor: null, unit: null, flat: null, parking: null, booking_price: null, booking_date: null, allotment_date: null, agreement_date: null, first_applicant_name: null, first_applicant_father_name: null, first_applicant_husband_name: null, first_applicant_permanentAddress: null, first_applicant_correspondAddress: null, first_applicant_contactNumber: null, first_applicant_email: null, first_applicant_dob: null, first_applicant_AadharNumber: null, first_applicant_pan_number: null, first_applicant_City: null, first_applicant_police_station: null, first_applicant_country: null, first_applicant_occupation: null, first_applicant_religion: null, first_applicant_status: null, second_applicant_name: null, second_applicant_father_name: null, second_applicant_husband_name: null, second_applicant_contact_number: null, second_applicant_email: null, second_applicant_dob: null, second_applicant_pan_number: null, second_applicant_occupation: null, second_applicant_address: null, second_applicant_relation_with_first_applicant: null, third_applicant_name: null, third_applicant_phone_number: null, fourth_applicant_name: null, fourth_applicant_phone_number: null, second_applicant_adhar_number: null, id:null})
     setIsEdit(false);
   }
     
+  const getTotalPrice = ()=>{
+    let booking = document.getElementById('price');
+    let gst = document.getElementById('price_with_tax');
+    let totalPrice = document.getElementById('totalAmount')
+    if(Booking.booking_price != null && Booking.price_with_tax !=null){
+    let price = booking.value;
+    let tax = gst.value;
+    let total = parseInt(price) + (price * (tax / 100));
+    booking.value = price;
+    gst.value = tax;
+    if(Booking.parking_price != null) total = parseInt(total) + parseInt(Booking.parking_price);
+    totalPrice.value = parseInt(total);
+    }
+  }
     return (
       <>
         <div className="container bg-white p-2 rounded-2">
@@ -372,7 +419,7 @@ const SetBooking = () => {
                 </select>
               </div>
             </div>
-            <div className="col-md-6 col-12 mb-2">
+            <div className="col-md-4 col-12 mb-2">
               <p className="text-alternate">Select Floor</p>
               <div className="input-group">
                 <select className="form-control" id="floor" name="floor" onChange={handleInputs} value={Booking.floor}>
@@ -390,10 +437,10 @@ const SetBooking = () => {
                 </select>
               </div>
             </div>
-            <div className="col-md-6 col-12 mb-2">
+            <div className="col-md-4 col-12 mb-2">
               <p className="text-alternate">Select Unit</p>
               <div className="input-group">
-                <select className="form-control" id="unit" name="unit" onChange={handleInputs} value={Booking.unit}>
+                <select className="form-control" id="unit" name="unit" onChange={(e) => {handleInputs(e); getPrice();}} value={Booking.unit}>
                   {Booking.Project === null && Booking.building === null && <option value={null} name={null}>Select Project First</option>}
                   {Booking.building === null && Booking.Project !== null && <option value={null} name={null}>Select Building First</option>}
                   {Booking.building !== null && Booking.Project !== null && allUnits === null && <option value={null} name={null}>Loading...</option>}
@@ -414,36 +461,9 @@ const SetBooking = () => {
                 </select>
               </div>
             </div>
-            <div className="col-md-4 col-12 mb-2">
-              <p className="text-alternate">Select Flat</p>
-              <div className="input-group">
-                <select className="form-control" id="flat" name="flat" value={Booking.flat} onChange={handleInputs} >
-                  {Building === null ?
-                    <option value={null} name={null}>Loading...</option>
-                    : <option value={null} name={null}>Select Flat</option>}
-                  {Building !== null && Building?.total_number_of_flats === 0 &&
-                    <option value={null} name={null}>No Flat Avaliable</option>
-                  }
-                  {
-                    Building !== null &&
-                    Building?.total_number_of_flats > 0 &&
-                    renderFlat(Building?.total_number_of_flats)
-                  }
-                </select>
-              </div>
-            </div>
+            
             <div className="col-md-4 col-12 mb-2">
               <p className="text-alternate">Parking</p>
-              <div className="input-group">
-                <span className="input-group-text">
-                  <input
-                    aria-label="Parkings"
-                    id="isParkings"
-                    name="isParkings"
-                    type="radio"
-                    className="form-check-input"
-                  />
-                </span>
                 <input
                   type="number"
                   aria-label="Parking No"
@@ -453,11 +473,14 @@ const SetBooking = () => {
                   name="parking"
                   required=""
                   value={Booking.parking}
-                  onChange={handleInputs}
+                  onChange={(e)=>{handleInputs(e);getTotalPrice();}}
                 />
-              </div>
             </div>
-            <div className="col-md-4 col-12 mb-2">
+            <div className="col-md-3 col-12 mb-2">
+              <p className="text-alternate">Parking Price</p>
+                {Booking.parking_price !== null ?<p className="text-alternate" >{Booking.parking_price}</p>:<p className="text-alternate">Loading...</p>}
+            </div>
+            <div className="col-md-3 col-12 mb-2">
               <p className="text-alternate">Booking Price</p>
               <div className="input-group">
                 <input
@@ -466,6 +489,34 @@ const SetBooking = () => {
                   id="price"
                   name="booking_price"
                   value={Booking.booking_price}
+                  onChange={(e)=>{handleInputs(e);getTotalPrice();}}
+                  required=""
+                />
+              </div>
+            </div>
+            <div className="col-md-3 col-12 mb-2">
+              <p className="text-alternate">GST</p>
+              <div className="input-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="price_with_tax"
+                  name="price_with_tax"
+                  value={Booking.price_with_tax}
+                  onChange={(e)=>{handleInputs(e);getTotalPrice();}}
+                  required=""
+                />
+              </div>
+            </div>
+            <div className="col-md-3 col-12 mb-2">
+              <p className="text-alternate">Total Amount</p>
+              <div className="input-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="totalAmount"
+                  name="totalAmount"
+                  value={Booking.totalAmount}
                   onChange={handleInputs}
                   required=""
                 />
@@ -645,7 +696,7 @@ const SetBooking = () => {
               <p className="text-alternate"> Pan No</p>
               <div className="input-group">
                 <input
-                  type="number"
+                  type="text"
                   className="form-control"
                   id="pan"
                   onChange={handleInputs}
@@ -1010,7 +1061,6 @@ const SetBooking = () => {
               <table className="table table-striped table-responsive">
                 <tr>
                   <th>Sno.</th>
-                  <th>ID</th>
                   <th>First Applicant</th>
                   <th>Contact No</th>
                   <th>Booking Price</th>
@@ -1022,7 +1072,6 @@ const SetBooking = () => {
                   return (
                     <tr>
                       <td>{j + 1}</td>
-                      <td>{i?._id}</td>
                       <td>{i?.first_applicant_name}</td>
                       <td>{i?.first_applicant_contactNumber}</td>
                       <td>{i?.booking_price}</td>
